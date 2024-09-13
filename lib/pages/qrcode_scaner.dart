@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class QRViewExample extends StatefulWidget {
   const QRViewExample({super.key});
@@ -40,21 +41,6 @@ class _QRViewExampleState extends State<QRViewExample> {
               )
             ],
           ),
-          // Çerçeve
-          Center(
-            child: Container(
-              width: 250, // Çerçevenin genişliği
-              height: 250, // Çerçevenin yüksekliği
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.red, // Çerçevenin rengi
-                  width: 4.0, // Çerçevenin kalınlığı
-                ),
-                borderRadius:
-                    BorderRadius.circular(12), // Yuvarlatılmış kenarlar
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -68,7 +54,52 @@ class _QRViewExampleState extends State<QRViewExample> {
       setState(() {
         result = scanData;
       });
+      _checkIfUrl(scanData.code!); // QR kodu kontrol ediyoruz
     });
+  }
+
+  // QR koddan gelen değerin URL olup olmadığını kontrol eden ve "karenbilisim.com" içerip içermediğini denetleyen fonksiyon
+  void _checkIfUrl(String scannedData) {
+    final Uri? uri =
+        Uri.tryParse(scannedData); // String'i URL'ye çevirmeye çalışıyoruz
+
+    if (uri != null && (uri.isScheme('http') || uri.isScheme('https'))) {
+      // URL geçerli ve http/https protokolü ile başlıyorsa
+      if (scannedData.contains('karenbilisim.com')) {
+        // URL "karenbilisim.com" içeriyor mu?
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bu URL "karenbilisim.com" içeriyor!'),
+          ),
+        );
+        _launchUrl(scannedData); // URL açmayı deneyelim
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bu URL "karenbilisim.com" içermiyor.'),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Geçersiz bir URL.'),
+        ),
+      );
+    }
+  }
+
+  // URL'yi açmak için
+  Future<void> _launchUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url); // URL'yi tarayıcıda açar
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('URL açılamıyor.'),
+        ),
+      );
+    }
   }
 
   @override

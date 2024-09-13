@@ -210,6 +210,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _handleCameraPermission(BuildContext context) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const QRViewExample()),
+    );
+    /*
     var status = await Permission.camera.status;
 
     // Eğer izin verilmediyse kullanıcıya izni soruyoruz
@@ -231,5 +236,6 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
+    */
   }
 }
