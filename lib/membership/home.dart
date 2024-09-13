@@ -2,6 +2,7 @@ import 'package:firintas/membership/custom_member/custom_btn_member.dart';
 import 'package:firintas/membership/signin.dart';
 import 'package:firintas/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -76,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                         CustomBtnMember.customBtnMember(
                           color: Color.fromARGB(255, 56, 107, 237),
                           onTap: () {
-                            navigateToPage(2);
+                            // navigateToPage(2);
                           },
                           labelText: 'Facebook ile Giriş',
                           icon: Icons.facebook,
@@ -85,10 +86,10 @@ class _LoginPageState extends State<LoginPage> {
                         CustomBtnMember.customBtnMember(
                           color: Colors.brown,
                           onTap: () {
-                            navigateToPage(3);
+                            // navigateToPage(3);
                           },
                           labelText: 'Google ile Giriş',
-                          icon: Icons.g_mobiledata,
+                          icon: FontAwesomeIcons.google,
                         ),
                       ],
                     ),

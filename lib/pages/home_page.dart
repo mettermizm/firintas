@@ -210,11 +210,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Kamera izni kontrol eden ve QR sayfasına yönlendiren fonksiyon
+  // Kamera izni kontrol eden ve QR sayfasına yönlendiren fonksiyon
   Future<void> _handleCameraPermission(BuildContext context) async {
     var status = await Permission.camera.status;
 
     // Eğer izin verilmediyse kullanıcıya izni soruyoruz
-    if (!status.isGranted) {
+    if (status.isDenied || status.isPermanentlyDenied) {
       status = await Permission.camera.request();
     }
 
@@ -236,10 +237,10 @@ class _HomePageState extends State<HomePage> {
 }
 
 class QRViewExample extends StatefulWidget {
-  const QRViewExample({Key? key}) : super(key: key);
+  const QRViewExample({super.key});
 
   @override
-  State<StatefulWidget> createState() => _QRViewExampleState();
+  State<QRViewExample> createState() => _QRViewExampleState();
 }
 
 class _QRViewExampleState extends State<QRViewExample> {
