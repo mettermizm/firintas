@@ -14,11 +14,18 @@ class CustomBtnMember {
         width: double.infinity,
         margin: const EdgeInsets.symmetric(horizontal: 32),
         decoration: BoxDecoration(
-          color: color,
+          color: labelText == "Google ile Giriş" ? null : color,
           borderRadius: BorderRadius.circular(25),
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: labelText == "Google ile Giriş"
+                  ? Colors.transparent
+                  : Colors.black.withOpacity(0.2),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -30,17 +37,22 @@ class CustomBtnMember {
             Padding(
               padding: const EdgeInsets.fromLTRB(35, 0, 0, 0),
               child: Container(
-                width: 30, // Sabit genişlik veriyoruz
-                alignment: Alignment.centerLeft, // İkonu sola hizalıyoruz
-                child: Icon(icon, color: Colors.white),
+                width: 30,
+                alignment: Alignment.centerLeft,
+                child: Icon(icon,
+                    color: labelText == "Google ile Giriş"
+                        ? Colors.black
+                        : Colors.white),
               ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
                 labelText,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: labelText == "Google ile Giriş"
+                      ? Colors.black
+                      : Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),

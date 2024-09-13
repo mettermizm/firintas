@@ -12,11 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Fırıntaş',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 235, 102, 6)),
-        useMaterial3: true,
-      ),
+      theme: ThemeData.light(),
       home: const LoginPage(),
     );
   }

@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 150,
                     width: 150,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: [
                         CustomBtnMember.customBtnMember(
-                          color: Color.fromARGB(255, 241, 102, 9),
+                          color: const Color.fromARGB(255, 241, 102, 9),
                           onTap: () {
                             navigateToPage(1);
                           },
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 16),
                         CustomBtnMember.customBtnMember(
-                          color: Color.fromARGB(255, 56, 107, 237),
+                          color: const Color.fromARGB(255, 56, 107, 237),
                           onTap: () {
                             // navigateToPage(2);
                           },

@@ -197,7 +197,9 @@ class _HomePageState extends State<HomePage> {
           ? () {
               _handleCameraPermission(context);
             }
-          : null,
+          : () {
+              print("dklv");
+            },
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         shape: RoundedRectangleBorder(

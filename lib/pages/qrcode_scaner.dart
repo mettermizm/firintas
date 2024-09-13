@@ -17,9 +17,7 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('QR Kod Okut'),
-      ),
+      backgroundColor: Colors.orange,
       body: Stack(
         children: [
           Column(
@@ -31,12 +29,14 @@ class _QRViewExampleState extends State<QRViewExample> {
                   onQRViewCreated: _onQRViewCreated,
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: (result != null)
-                      ? Text('QR Kodu: ${result!.code}')
-                      : const Text('QR Kodu okutun'),
+              Container(
+                child: Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: (result != null)
+                        ? Text('QR Kodu: ${result!.code}')
+                        : const Text('QR Kodu okutun'),
+                  ),
                 ),
               )
             ],
