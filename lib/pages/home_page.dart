@@ -1,6 +1,6 @@
+import 'package:firintas/pages/qrcode_scaner.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -209,8 +209,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Kamera izni kontrol eden ve QR sayfasına yönlendiren fonksiyon
-  // Kamera izni kontrol eden ve QR sayfasına yönlendiren fonksiyon
   Future<void> _handleCameraPermission(BuildContext context) async {
     var status = await Permission.camera.status;
 
@@ -225,7 +223,7 @@ class _HomePageState extends State<HomePage> {
         context,
         MaterialPageRoute(builder: (context) => const QRViewExample()),
       );
-    } else if (status.isDenied || status.isPermanentlyDenied) {
+    } else {
       // İzin verilmezse uyarı gösteriyoruz
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -233,63 +231,5 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-  }
-}
-
-class QRViewExample extends StatefulWidget {
-  const QRViewExample({super.key});
-
-  @override
-  State<QRViewExample> createState() => _QRViewExampleState();
-}
-
-class _QRViewExampleState extends State<QRViewExample> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
-  QRViewController? controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('QR Kod Okut'),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: (result != null)
-                  ? Text('QR Kodu: ${result!.code}')
-                  : const Text('QR Kodu okutun'),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }
