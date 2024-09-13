@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,8 +69,8 @@ class HomePage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildActionButton('QR Kod Okut'),
-                  _buildActionButton('Şubelerimiz'),
+                  _buildActionButton('QR Kod Okut', context),
+                  _buildActionButton('Şubelerimiz', context),
                 ],
               ),
             ),
@@ -184,9 +191,13 @@ class HomePage extends StatelessWidget {
   }
 
   // Buton (QR Kod, Şubeler için)
-  Widget _buildActionButton(String label) {
+  Widget _buildActionButton(String label, BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: label == 'QR Kod Okut'
+          ? () {
+              _handleCameraPermission(context);
+            }
+          : null,
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         shape: RoundedRectangleBorder(
@@ -196,5 +207,88 @@ class HomePage extends StatelessWidget {
       ),
       child: Text(label),
     );
+  }
+
+  // Kamera izni kontrol eden ve QR sayfasına yönlendiren fonksiyon
+  Future<void> _handleCameraPermission(BuildContext context) async {
+    var status = await Permission.camera.status;
+
+    // Eğer izin verilmediyse kullanıcıya izni soruyoruz
+    if (!status.isGranted) {
+      status = await Permission.camera.request();
+    }
+
+    // İzin verildiyse QR Kod sayfasına yönlendiriyoruz
+    if (status.isGranted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const QRViewExample()),
+      );
+    } else if (status.isDenied || status.isPermanentlyDenied) {
+      // İzin verilmezse uyarı gösteriyoruz
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Kamera izni gerekli!'),
+        ),
+      );
+    }
+  }
+}
+
+class QRViewExample extends StatefulWidget {
+  const QRViewExample({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _QRViewExampleState();
+}
+
+class _QRViewExampleState extends State<QRViewExample> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('QR Kod Okut'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 5,
+            child: QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: (result != null)
+                  ? Text('QR Kodu: ${result!.code}')
+                  : const Text('QR Kodu okutun'),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        result = scanData;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 }

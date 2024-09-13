@@ -1,6 +1,6 @@
+import 'package:firintas/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class SigninPage extends StatefulWidget {
   final VoidCallback navigateToSignup;
@@ -16,15 +16,9 @@ class _SigninPageState extends State<SigninPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> signIn() async {
-    // URL
+    print(_emailController.text);
     var url = Uri.parse(
-        'https://karenbilisim.com/demo2/firintas/api1/signin?email=${_emailController.value}&pass=${_passwordController.value}');
-
-    // POST isteğinde gönderilecek veriler
-    var body = {
-      'email': 'hicretcetin@gmail.com',
-      'pass': 'murtaza13',
-    };
+        'https://karenbilisim.com/demo2/firintas/api1/signin?email=${_emailController.text}&pass=${_passwordController.text}');
     try {
       var response = await http.get(
         url,
@@ -32,13 +26,14 @@ class _SigninPageState extends State<SigninPage> {
       );
 
       if (response.statusCode == 200) {
-        // Başarılı yanıtı işleme
-        print('Giriş başarılı!');
-        print('Yanıt: ${response.body}');
+        print("başarılı");
+        // Başarılı girişten sonra ana sayfaya yönlendirme
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
       } else {
-        // Hata durumu
-        print('Hata: ${response.statusCode}');
-        print('Hata mesajı: ${response.body}');
+        print("başarısız");
       }
     } catch (e) {
       print('İstek sırasında bir hata oluştu: $e');
