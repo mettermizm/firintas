@@ -21,24 +21,24 @@ class _QRViewExampleState extends State<QRViewExample> {
         children: [
           Column(
             children: <Widget>[
+              Container(
+                color: Colors.orange,
+                height: 100,
+              ),
               Expanded(
                 flex: 4,
                 child: Stack(
                   children: [
-                    // QR kod kamerası
                     QRView(
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
                     ),
-                    // Üstündeki karanlık maske ve kare boşluğu
                     Positioned.fill(
                       child: Stack(
                         children: [
-                          // Saydam karanlık katman
                           Container(
                             color: Colors.black.withOpacity(0.6),
                           ),
-                          // Ortadaki QR kare kısmı
                           Center(
                             child: Container(
                               width: 250,
@@ -49,7 +49,6 @@ class _QRViewExampleState extends State<QRViewExample> {
                               ),
                             ),
                           ),
-                          // Kare kısmını dışındaki bölümü saydam hale getiriyoruz
                           Positioned(
                             top: MediaQuery.of(context).size.height / 2 - 125,
                             left: MediaQuery.of(context).size.width / 2 - 125,
@@ -66,6 +65,14 @@ class _QRViewExampleState extends State<QRViewExample> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              // Alt kısım turuncu footer
+              Container(
+                color: Colors.orange,
+                height: 100,
+                child: Center(
+                  child: Image.asset("assets/images/firintaslogo.png"),
                 ),
               ),
             ],
