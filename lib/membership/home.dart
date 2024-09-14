@@ -117,7 +117,6 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            // Google ile Giriş Sayfası
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
