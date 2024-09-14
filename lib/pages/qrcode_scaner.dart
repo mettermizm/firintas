@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart'; // WebView için gerekli paket
 
 class QRViewExample extends StatefulWidget {
   const QRViewExample({super.key});
@@ -13,32 +13,46 @@ class _QRViewExampleState extends State<QRViewExample> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
+  String? scannedUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    // WebView controller'ın kullanılabilmesi için gerekli
+    // WebView.platform = SurfaceAndroidWebView();
+  }
+
+  late var controllerWebView;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: <Widget>[
-              Container(
-                color: Colors.orange,
-                height: 100,
-              ),
-              Expanded(
-                flex: 4,
-                child: Stack(
-                  children: [
-                    QRView(
-                      key: qrKey,
-                      onQRViewCreated: _onQRViewCreated,
+      body: scannedUrl == null
+          ? Stack(
+              children: [
+                Column(
+                  children: <Widget>[
+                    // Üst kısım (turuncu)
+                    Container(
+                      color: const Color.fromRGBO(241, 101, 10, 1),
+                      height: 100,
                     ),
-                    Positioned.fill(
+                    // QR Tarayıcı kısmı
+                    Expanded(
+                      flex: 4,
                       child: Stack(
                         children: [
-                          Container(
-                            color: Colors.black.withOpacity(0.6),
+                          QRView(
+                            key: qrKey,
+                            onQRViewCreated: _onQRViewCreated,
                           ),
+                          // Siyah saydam katman
+                          Positioned.fill(
+                            child: Container(
+                              color: Colors.black.withOpacity(0.6),
+                            ),
+                          ),
+                          // QR tarama için kare kutu
                           Center(
                             child: Container(
                               width: 250,
@@ -46,6 +60,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                               decoration: BoxDecoration(
                                 border:
                                     Border.all(color: Colors.white, width: 2),
+                                color: Colors.white.withOpacity(0.6),
                               ),
                             ),
                           ),
@@ -64,21 +79,28 @@ class _QRViewExampleState extends State<QRViewExample> {
                         ],
                       ),
                     ),
+                    // Alt kısım (turuncu)
+                    Container(
+                      color: const Color.fromRGBO(241, 101, 10, 1),
+                      height: 100,
+                    ),
                   ],
                 ),
-              ),
-              // Alt kısım turuncu footer
-              Container(
-                color: Colors.orange,
-                height: 100,
-                child: Center(
-                  child: Image.asset("assets/images/firintaslogo.png"),
+                // Görselin en üstte olmasını sağlıyoruz
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Image.asset(
+                      "assets/images/firintaslogo.png",
+                      height: 150,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
+              ],
+            )
+          : WebViewWidget(controller: controllerWebView),
     );
   }
 
@@ -89,50 +111,44 @@ class _QRViewExampleState extends State<QRViewExample> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
+        _checkIfUrl(scanData.code!); // QR kodu kontrol ediyoruz
       });
-      _checkIfUrl(scanData.code!); // QR kodu kontrol ediyoruz
     });
   }
 
-  // QR koddan gelen değerin URL olup olmadığını kontrol eden ve "karenbilisim.com" içerip içermediğini denetleyen fonksiyon
+  // QR koddan gelen değerin URL olup olmadığını kontrol eden fonksiyon
   void _checkIfUrl(String scannedData) {
     final Uri? uri =
         Uri.tryParse(scannedData); // String'i URL'ye çevirmeye çalışıyoruz
 
     if (uri != null && (uri.isScheme('http') || uri.isScheme('https'))) {
-      // URL geçerli ve http/https protokolü ile başlıyorsa
-      if (scannedData.contains('karenbilisim.com')) {
-        // URL "karenbilisim.com" içeriyor mu?
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Bu URL "karenbilisim.com" içeriyor!'),
-          ),
-        );
-        _launchUrl(scannedData); // URL açmayı deneyelim
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Bu URL "karenbilisim.com" içermiyor.'),
-          ),
-        );
-      }
+      setState(() {
+        scannedUrl = scannedData; // WebView'da açılacak URL'yi ayarlıyoruz
+        controllerWebView = WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onProgress: (int progress) {
+                // Update loading bar.
+              },
+              onPageStarted: (String url) {},
+              onPageFinished: (String url) {},
+              onHttpError: (HttpResponseError error) {},
+              onWebResourceError: (WebResourceError error) {},
+              onNavigationRequest: (NavigationRequest request) {
+                if (request.url.startsWith('https://www.youtube.com/')) {
+                  return NavigationDecision.prevent;
+                }
+                return NavigationDecision.navigate;
+              },
+            ),
+          )
+          ..loadRequest(Uri.parse(scannedUrl!));
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Geçersiz bir URL.'),
-        ),
-      );
-    }
-  }
-
-  // URL'yi açmak için
-  Future<void> _launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url); // URL'yi tarayıcıda açar
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('URL açılamıyor.'),
         ),
       );
     }
