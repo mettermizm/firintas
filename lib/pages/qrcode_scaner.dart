@@ -60,7 +60,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                               decoration: BoxDecoration(
                                 border:
                                     Border.all(color: Colors.white, width: 2),
-                                color: Colors.white.withOpacity(0.6),
+                                color: Colors.white.withOpacity(0.2),
                               ),
                             ),
                           ),
