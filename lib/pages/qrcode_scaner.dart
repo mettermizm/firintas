@@ -17,28 +17,57 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange,
       body: Stack(
         children: [
           Column(
             children: <Widget>[
               Expanded(
-                flex: 5,
-                child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
+                flex: 4,
+                child: Stack(
+                  children: [
+                    // QR kod kamerası
+                    QRView(
+                      key: qrKey,
+                      onQRViewCreated: _onQRViewCreated,
+                    ),
+                    // Üstündeki karanlık maske ve kare boşluğu
+                    Positioned.fill(
+                      child: Stack(
+                        children: [
+                          // Saydam karanlık katman
+                          Container(
+                            color: Colors.black.withOpacity(0.6),
+                          ),
+                          // Ortadaki QR kare kısmı
+                          Center(
+                            child: Container(
+                              width: 250,
+                              height: 250,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 2),
+                              ),
+                            ),
+                          ),
+                          // Kare kısmını dışındaki bölümü saydam hale getiriyoruz
+                          Positioned(
+                            top: MediaQuery.of(context).size.height / 2 - 125,
+                            left: MediaQuery.of(context).size.width / 2 - 125,
+                            child: ClipPath(
+                              clipper: _QRScannerOverlayShape(),
+                              child: Container(
+                                width: 250,
+                                height: 250,
+                                color: Colors.transparent,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                child: Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: (result != null)
-                        ? Text('QR Kodu: ${result!.code}')
-                        : const Text('QR Kodu okutun'),
-                  ),
-                ),
-              )
             ],
           ),
         ],
@@ -106,5 +135,32 @@ class _QRViewExampleState extends State<QRViewExample> {
   void dispose() {
     controller?.dispose();
     super.dispose();
+  }
+}
+
+class _QRScannerOverlayShape extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+
+    // Dış kenarları oluşturuyoruz
+    path.addRect(Rect.fromLTWH(0, 0, size.width, size.height));
+
+    // Ortada boş bir kare bırakıyoruz
+    final holeRect = Rect.fromLTWH(
+      size.width / 2 - 125,
+      size.height / 2 - 125,
+      250,
+      250,
+    );
+    path.addRect(holeRect);
+
+    path.fillType = PathFillType.evenOdd;
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
   }
 }
