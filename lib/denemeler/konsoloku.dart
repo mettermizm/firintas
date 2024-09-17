@@ -1,3 +1,5 @@
+import 'dart:async'; // Zamanlayıcı için gerekli
+import 'package:firintas/pages/qrcode_scaner.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -9,8 +11,10 @@ class QrConsoleRead extends StatefulWidget {
 }
 
 class _QrConsoleReadState extends State<QrConsoleRead> {
-  late WebViewController _webViewController; // WebViewController
-  String consoleMessage = ''; // Gelen mesajları saklamak için
+  late WebViewController _webViewController;
+  String consoleMessage = '';
+  Timer? _timer;
+  String? cookies;
 
   @override
   void initState() {
@@ -22,61 +26,87 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
           onProgress: (int progress) {},
           onPageStarted: (String url) {},
           onPageFinished: (String url) {
-            _webViewController.runJavaScript(
-              """
-              (function() {
-                var oldLog = console.log;
-                console.log = function (message) {
-                  ConsoleLog.postMessage(message);
-                  oldLog.apply(console, arguments);
-                };
-              })();
-              """,
-            );
+            _startCookieCheck();
           },
         ),
       )
-      ..addJavaScriptChannel(
-        'ConsoleLog', // JavaScript kanalını dinle
-        onMessageReceived: (JavaScriptMessage message) {
-          setState(() {
-            consoleMessage =
-                message.message; // Gelen mesajı kaydet ve ekranda göster
-            print('JavaScript mesajı: ${message.message}');
-          });
-        },
-      )
-      ..loadRequest(Uri.parse('https://karenbilisim.com/demo2/firintas/'));
+      ..loadRequest(Uri.parse('https://karenbilisim.com/demo2/firintas?v=3'));
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _startCookieCheck() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      _webViewController
+          .runJavaScriptReturningResult('document.cookie')
+          .then((result) {
+        setState(() {
+          //print(result);
+          cookies = result.toString();
+          if (result.toString().contains('qr_code')) {
+            consoleMessage = 'qr_code çerezi mevcut';
+
+            // Çerezi sil
+            _webViewController
+                .runJavaScript(
+                    "document.cookie = 'qr_code=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';")
+                .then((_) {
+              // Çerezi sildikten sonra sayfaya yönlendir
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const QRViewExample()));
+            }).catchError((error) {
+              print('Çerez silme hatası: $error');
+            });
+          } else {
+            consoleMessage = 'qr_code çerezi bulunamadı';
+          }
+        });
+      }).catchError((error) {
+        //print('Hata: $error');
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("WebView Console Logger"),
+        backgroundColor: Colors.white,
+        title: const Text('Mehmet'),
+        centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_bag_outlined),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {},
+          ),
+        ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: WebViewWidget(controller: _webViewController),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
+      body: Column(
+        children: [
+          Expanded(
+            child: WebViewWidget(controller: _webViewController),
+          ),
+          if (cookies != null) const SizedBox(),
+          /*
+            Container(
+              color: Colors.white,
+              child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                color: Colors.black,
-                child: SingleChildScrollView(
-                  child: Text(
-                    "Console Message: \n$consoleMessage",
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
+                child: Text('Çerezler: $cookies'),
               ),
             ),
-          ],
-        ),
+            */
+        ],
       ),
     );
   }
