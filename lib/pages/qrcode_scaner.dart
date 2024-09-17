@@ -117,11 +117,29 @@ class _QRViewExampleState extends State<QRViewExample> {
         scannedUrl = scannedData;
         controllerWebView = WebViewController()
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..addJavaScriptChannel(
+            'ConsoleLog',
+            onMessageReceived: (JavaScriptMessage message) {
+              print('Console message: ${message.message}');
+            },
+          )
           ..setNavigationDelegate(
             NavigationDelegate(
               onProgress: (int progress) {},
               onPageStarted: (String url) {},
-              onPageFinished: (String url) {},
+              onPageFinished: (String url) {
+                controllerWebView.runJavaScript(
+                  """
+                  (function() {
+                    var oldLog = console.log;
+                    console.log = function (message) {
+                      ConsoleLog.postMessage(message);
+                      oldLog.apply(console, arguments);
+                    };
+                  })();
+                  """,
+                );
+              },
               onHttpError: (HttpResponseError error) {},
               onWebResourceError: (WebResourceError error) {},
               onNavigationRequest: (NavigationRequest request) {
@@ -132,7 +150,8 @@ class _QRViewExampleState extends State<QRViewExample> {
               },
             ),
           )
-          ..loadRequest(Uri.parse(scannedUrl!));
+          ..loadRequest(Uri.parse("https://karenbilisim.com/demo2/firintas/"));
+        // ..loadRequest(Uri.parse(scannedUrl!));
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
