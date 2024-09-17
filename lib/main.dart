@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Fırıntaş',
       theme: ThemeData.light(),
-      home: const QrConsoleRead(),
+      home: const LoginPage(),
     );
   }
 }

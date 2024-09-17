@@ -1,3 +1,4 @@
+import 'package:firintas/denemeler/konsoloku.dart';
 import 'package:firintas/membership/custom_member/custom_btn_member.dart';
 import 'package:firintas/membership/signin.dart';
 import 'package:firintas/pages/home_page.dart';
@@ -49,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+                              builder: (context) => const QrConsoleRead()));
                     },
                     child: const Text(
                       'Üye olmadan devam et',
@@ -99,6 +100,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SigninPage(navigateToSignup: () => navigateToPage(1)),
+            /*
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -135,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
+            */
           ],
         ),
       ),

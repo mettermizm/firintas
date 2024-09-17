@@ -1,3 +1,5 @@
+import 'package:firintas/custom/custom_class.dart';
+import 'package:firintas/denemeler/konsoloku.dart';
 import 'package:firintas/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -30,7 +32,7 @@ class _SigninPageState extends State<SigninPage> {
         // Başarılı girişten sonra ana sayfaya yönlendirme
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const QrConsoleRead()),
         );
       } else {
         print("başarısız");
@@ -42,44 +44,91 @@ class _SigninPageState extends State<SigninPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Giriş Yap',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              labelStyle: TextStyle(color: Colors.orange),
-              border: OutlineInputBorder(),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text(
+          "Giriş Yap",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 200,
+              width: 200,
+              child: Image.asset("assets/images/firintaslogo.png"),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _passwordController,
-            decoration: const InputDecoration(
-              labelText: 'Şifre',
-              border: OutlineInputBorder(),
+            const SizedBox(
+              height: 30,
             ),
-            obscureText: true,
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: signIn,
-            child: const Text('Giriş Yap'),
-          ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: widget.navigateToSignup,
-            child: const Text('Hesabınız yok mu? Kayıt olun.'),
-          ),
-        ],
+            const SizedBox(height: 16),
+            CustomTextField.customTextField(
+                controller: _emailController,
+                label: "Email",
+                icon: const Icon(
+                  Icons.email,
+                  color: Color.fromARGB(177, 56, 107, 237),
+                )),
+            const SizedBox(height: 16),
+            CustomTextField.customTextField(
+                controller: _passwordController,
+                label: "Şifre",
+                obscure: true,
+                icon: const Icon(
+                  Icons.password,
+                  color: Color.fromARGB(154, 56, 107, 237),
+                )),
+            const SizedBox(height: 16),
+            /*
+            ElevatedButton(
+              onPressed: signIn,
+              child: const Text('Giriş Yap'),
+            ),
+            */
+            GestureDetector(
+              onTap: signIn,
+              child: Container(
+                width: MediaQuery.sizeOf(context).width - 100,
+                padding: const EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black26),
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.09),
+                      offset: const Offset(3, 3),
+                      blurRadius: 6.0,
+                      spreadRadius: 2.0,
+                    ),
+                  ],
+                ),
+                child: const Center(
+                    child: Text(
+                  "Giriş Yap",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                )),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: widget.navigateToSignup,
+              child: const Text(
+                'Hesabınız yok mu? Kayıt olun.',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

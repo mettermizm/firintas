@@ -45,7 +45,6 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
           .runJavaScriptReturningResult('document.cookie')
           .then((result) {
         setState(() {
-          //print(result);
           cookies = result.toString();
           if (result.toString().contains('qr_code')) {
             consoleMessage = 'qr_code çerezi mevcut';
@@ -67,9 +66,7 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
             consoleMessage = 'qr_code çerezi bulunamadı';
           }
         });
-      }).catchError((error) {
-        //print('Hata: $error');
-      });
+      }).catchError((error) {});
     });
   }
 
@@ -85,9 +82,16 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
             icon: const Icon(Icons.shopping_bag_outlined),
             onPressed: () {},
           ),
-          IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {},
+          Builder(
+            // Builder ile doğru context sağlıyoruz
+            builder: (context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer(); // Drawer'ı açar
+                },
+              );
+            },
           ),
         ],
       ),
@@ -97,16 +101,41 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
             child: WebViewWidget(controller: _webViewController),
           ),
           if (cookies != null) const SizedBox(),
-          /*
-            Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Çerezler: $cookies'),
+        ],
+      ),
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Menü Başlığı',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
               ),
             ),
-            */
-        ],
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Anasayfa'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Ayarlar'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Çıkış'),
+              onTap: () {},
+            ),
+          ],
+        ),
       ),
     );
   }
