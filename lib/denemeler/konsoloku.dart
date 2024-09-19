@@ -27,10 +27,12 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
           onPageStarted: (String url) {},
           onPageFinished: (String url) {
             _startCookieCheck();
+            //print(DateTime.now().second);
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://karenbilisim.com/demo2/firintas?v=3'));
+      ..loadRequest(Uri.parse(
+          'https://karenbilisim.com/demo2/firintas?v=${DateTime.now().second}'));
   }
 
   @override

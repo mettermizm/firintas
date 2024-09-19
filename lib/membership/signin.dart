@@ -73,7 +73,7 @@ class _SigninPageState extends State<SigninPage> {
                 label: "Email",
                 icon: const Icon(
                   Icons.email,
-                  color: Color.fromARGB(177, 56, 107, 237),
+                  color: Color.fromARGB(154, 255, 82, 2),
                 )),
             const SizedBox(height: 16),
             CustomTextField.customTextField(
@@ -82,7 +82,7 @@ class _SigninPageState extends State<SigninPage> {
                 obscure: true,
                 icon: const Icon(
                   Icons.password,
-                  color: Color.fromARGB(154, 56, 107, 237),
+                  color: Color.fromARGB(154, 255, 82, 2),
                 )),
             const SizedBox(height: 16),
             /*
