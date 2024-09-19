@@ -77,6 +77,7 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
         backgroundColor: Colors.white,
         title: const Text('Mehmet'),
         centerTitle: false,
+        automaticallyImplyLeading: false, // Geri oku kaldırmak için
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_bag_outlined),
@@ -109,7 +110,7 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Color.fromRGBO(241, 102, 11, 1),
               ),
               child: Text(
                 'Menü Başlığı',
