@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomText {
   static Text customOrangeText(
@@ -14,17 +15,53 @@ class CustomText {
   }
 }
 
-class CustomTextField {
-  static Widget customTextField({
-    required TextEditingController controller,
-    required String label,
-    required Icon icon,
-    bool? obscure,
-  }) {
+class CustomTextField extends StatefulWidget {
+  final TextEditingController controller;
+  final String label;
+  final Icon icon;
+  final bool? obscure;
+  final List<TextInputFormatter>? inputFormat;
+  final RichText? prefix;
+
+  const CustomTextField({
+    required this.controller,
+    required this.label,
+    required this.icon,
+    this.obscure,
+    this.inputFormat,
+    this.prefix,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  late bool _obscureText;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText =
+        widget.obscure ?? false; // Eğer obscureText null ise false yap
+  }
+
+  void _toggleObscureText() {
+    setState(() {
+      _obscureText = !_obscureText; // Gizli metni açıp kapatmak için
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
+      inputFormatters: widget.inputFormat,
+      controller: widget.controller,
+      obscureText: _obscureText, // Gizli metin durumu
       decoration: InputDecoration(
-        labelText: label,
+        prefix: widget.prefix,
+        labelText: widget.label,
         labelStyle: const TextStyle(
           color: Color.fromARGB(255, 34, 34, 34),
         ),
@@ -44,14 +81,21 @@ class CustomTextField {
           ),
           borderRadius: BorderRadius.circular(12.0),
         ),
-        suffixIcon: icon,
+        suffixIcon: widget.obscure != null
+            ? GestureDetector(
+                onTap: _toggleObscureText,
+                child: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: const Color.fromARGB(255, 241, 102, 9),
+                ),
+              )
+            : widget.icon,
       ),
-      obscureText: obscure ?? false,
       style: const TextStyle(
         color: Color.fromARGB(255, 34, 34, 34),
         fontWeight: FontWeight.w500,
       ),
-      cursorColor: Color.fromARGB(255, 9, 102, 241),
+      cursorColor: const Color.fromARGB(255, 9, 102, 241),
     );
   }
 }

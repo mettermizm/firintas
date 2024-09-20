@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:firintas/custom/custom_class.dart';
+import 'package:firintas/custom/custom_showdialog.dart';
 import 'package:firintas/denemeler/konsoloku.dart';
+import 'package:firintas/membership/signup.dart';
 import 'package:firintas/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -28,17 +32,43 @@ class _SigninPageState extends State<SigninPage> {
       );
 
       if (response.statusCode == 200) {
-        print("başarılı");
-        // Başarılı girişten sonra ana sayfaya yönlendirme
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const QrConsoleRead()),
-        );
+        var jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['status'] == 1) {
+          // Başarılı giriş mesajı
+          await CustomDialog.showCustomDialog(
+            context: context,
+            title: "Başarılı",
+            content: "Başarılı: ${jsonResponse['error']}",
+          );
+
+          // Başarılı girişten sonra ana sayfaya yönlendirme
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const QrConsoleRead()),
+          );
+        } else {
+          // Başarısız giriş mesajı
+          await CustomDialog.showCustomDialog(
+            context: context,
+            title: "Başarısız",
+            content: "Başarısız: ${jsonResponse['error']}",
+          );
+        }
       } else {
-        print("başarısız");
+        // Sunucu hatası mesajı
+        await CustomDialog.showCustomDialog(
+          context: context,
+          title: "Sunucu Hatası",
+          content: "Sunucu hatası: ${response.statusCode}",
+        );
       }
     } catch (e) {
-      print('İstek sırasında bir hata oluştu: $e');
+      // İstek sırasında hata mesajı
+      await CustomDialog.showCustomDialog(
+        context: context,
+        title: "Hata",
+        content: 'İstek sırasında bir hata oluştu: $e',
+      );
     }
   }
 
@@ -68,7 +98,7 @@ class _SigninPageState extends State<SigninPage> {
               height: 30,
             ),
             const SizedBox(height: 16),
-            CustomTextField.customTextField(
+            CustomTextField(
                 controller: _emailController,
                 label: "Email",
                 icon: const Icon(
@@ -76,7 +106,7 @@ class _SigninPageState extends State<SigninPage> {
                   color: Color.fromARGB(154, 255, 82, 2),
                 )),
             const SizedBox(height: 16),
-            CustomTextField.customTextField(
+            CustomTextField(
                 controller: _passwordController,
                 label: "Şifre",
                 obscure: true,
@@ -121,7 +151,10 @@ class _SigninPageState extends State<SigninPage> {
             ),
             const SizedBox(height: 16),
             TextButton(
-              onPressed: widget.navigateToSignup,
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignupPage()));
+              },
               child: const Text(
                 'Hesabınız yok mu? Kayıt olun.',
                 style: TextStyle(color: Colors.black),
