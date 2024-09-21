@@ -1,6 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+class CustomAppBar {
+  static AppBar customAppBar(String appbarText) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      title: Text(appbarText),
+      centerTitle: false,
+      automaticallyImplyLeading: false,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.shopping_bag_outlined),
+          onPressed: () {},
+        ),
+        Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class CustomText {
   static Text customOrangeText(
       String text, double fontSize, String? fontFamily) {

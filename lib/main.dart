@@ -1,6 +1,5 @@
-import 'package:firintas/denemeler/konsoloku.dart';
-import 'package:firintas/membership/home.dart';
-import 'package:firintas/pages/qrcode_scaner.dart';
+import 'package:firintas/denemeler/den2.dart';
+import 'package:firintas/membership/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Fırıntaş',
       theme: ThemeData.light(),
-      home: const LoginPage(),
+      home: DENNO(),
     );
   }
 }

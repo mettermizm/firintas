@@ -33,6 +33,8 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
       )
       ..loadRequest(Uri.parse(
           'https://karenbilisim.com/demo2/firintas?v=${DateTime.now().second}'));
+
+    //print('https://karenbilisim.com/demo2/firintas?v=${DateTime.now().second}');
   }
 
   @override
@@ -79,19 +81,18 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
         backgroundColor: Colors.white,
         title: const Text('Mehmet'),
         centerTitle: false,
-        automaticallyImplyLeading: false, // Geri oku kaldırmak için
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_bag_outlined),
             onPressed: () {},
           ),
           Builder(
-            // Builder ile doğru context sağlıyoruz
             builder: (context) {
               return IconButton(
                 icon: const Icon(Icons.menu),
                 onPressed: () {
-                  Scaffold.of(context).openEndDrawer(); // Drawer'ı açar
+                  Scaffold.of(context).openEndDrawer();
                 },
               );
             },

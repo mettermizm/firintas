@@ -30,20 +30,11 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
         if (jsonResponse['status'] == 1) {
-          // Başarılı giriş mesajı
-          await CustomDialog.showCustomDialog(
-            context: context,
-            title: "Başarılı",
-            content: "Başarılı: ${jsonResponse['error']}",
-          );
-
-          // Başarılı girişten sonra ana sayfaya yönlendirme
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const QrConsoleRead()),
           );
         } else {
-          // Başarısız giriş mesajı
           await CustomDialog.showCustomDialog(
             context: context,
             title: "Başarısız",
