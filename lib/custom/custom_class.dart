@@ -126,3 +126,36 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 }
+
+class CustomBtn {
+  static Widget customBtn(
+      VoidCallback signIn, BuildContext context, double width, String text) {
+    return GestureDetector(
+      onTap: signIn,
+      child: Container(
+        width: width,
+        padding: const EdgeInsets.all(15.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              offset: const Offset(3, 3),
+              blurRadius: 6.0,
+              spreadRadius: 2.0,
+            ),
+          ],
+        ),
+        child: Center(
+            child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+          ),
+        )),
+      ),
+    );
+  }
+}

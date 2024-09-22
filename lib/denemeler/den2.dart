@@ -1,83 +1,104 @@
 import 'package:flutter/material.dart';
 
-class DENNO extends StatelessWidget {
+class SliderTop extends StatelessWidget {
+  const SliderTop({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Horizontal Slider with Stacked Boxes'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: SizedBox(
-            height: 300, // Increased height to accommodate overflow
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(10, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: SizedBox(
-                      width: 200, // Match width of container to avoid clipping
-                      child: Stack(
-                        clipBehavior: Clip.none, // Allow overflow
-                        children: [
-                          // Bottom larger box
-                          Container(
-                            width: 200,
-                            height: 200,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Center(
+        child: Container(
+          height: 230,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(10, (index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: SizedBox(
+                    width: 160,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          width: 150,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(241, 102, 11, 1),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.orange.withOpacity(0.5),
+                                offset: const Offset(-10, 10),
+                                blurRadius: 40.0,
+                                spreadRadius: 0.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: -20,
+                          left: 20,
+                          child: Container(
+                            width: 110,
+                            height: 110,
                             decoration: BoxDecoration(
-                              color: Colors.orangeAccent,
+                              color: const Color.fromRGBO(231, 155, 104, 1),
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          // Top smaller box with overflow upwards
-                          Positioned(
-                            top: -40, // Adjust the overlap
-                            left: 20, // Adjust horizontal alignment
-                            child: Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Colors.deepOrangeAccent,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: -70,
-                            left: 40,
-                            child: Container(
-                              width: 120,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    'https://karenbilisim.com/demo2/firintas/doc/x/urun/icelatte.png',
-                                  ),
-                                  fit: BoxFit.cover,
+                        ),
+                        Positioned(
+                          top: -50,
+                          left: 25,
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/icelatte.png',
                                 ),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        Positioned(
+                          top: 95,
+                          left: 15,
+                          child: Container(
+                            child: Text(
+                              "Iced Latte",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 110,
+                          left: 15,
+                          child: Container(
+                            child: Text(
+                              "₺ 120",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                }),
-              ),
+                  ),
+                );
+              }),
             ),
           ),
         ),
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: DENNO(),
-  ));
 }

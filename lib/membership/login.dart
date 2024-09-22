@@ -115,34 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                           color: Color.fromARGB(154, 255, 82, 2),
                         )),
                     const SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: signIn,
-                      child: Container(
-                        width: MediaQuery.sizeOf(context).width - 100,
-                        padding: const EdgeInsets.all(15.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.black26),
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.09),
-                              offset: const Offset(3, 3),
-                              blurRadius: 6.0,
-                              spreadRadius: 2.0,
-                            ),
-                          ],
-                        ),
-                        child: const Center(
-                            child: Text(
-                          "Giriş Yap",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                        )),
-                      ),
-                    ),
+                    CustomBtn.customBtn(signIn, context,
+                        MediaQuery.sizeOf(context).width - 100, "Giriş Yap"),
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () {

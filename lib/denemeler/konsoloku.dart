@@ -1,4 +1,6 @@
 import 'dart:async'; // Zamanlayıcı için gerekli
+import 'package:firintas/custom/custom_class.dart';
+import 'package:firintas/denemeler/den2.dart';
 import 'package:firintas/pages/qrcode_scaner.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -77,6 +79,7 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text('Mehmet'),
@@ -101,10 +104,55 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
       ),
       body: Column(
         children: [
+          /*
           Expanded(
             child: WebViewWidget(controller: _webViewController),
           ),
           if (cookies != null) const SizedBox(),
+          */
+          const SliderTop(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomBtn.customBtn(() {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const QRViewExample()));
+              }, context, MediaQuery.sizeOf(context).width / 2 - 30,
+                  "QR Kod Okut"),
+              const SizedBox(
+                width: 30,
+              ),
+              CustomBtn.customBtn(() {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const QRViewExample()));
+              }, context, MediaQuery.sizeOf(context).width / 2 - 30,
+                  "Şubelerimiz"),
+            ],
+          ),
+          const SizedBox(
+            height: 50,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  child: Text("Sevilen Ürünlerimiz"),
+                ),
+                SizedBox(
+                  child: Text(
+                    "Daha Fazla",
+                    style: TextStyle(color: Colors.orange),
+                  ),
+                )
+              ],
+            ),
+          )
         ],
       ),
       endDrawer: Drawer(
