@@ -1,9 +1,9 @@
 import 'dart:convert';
-
+import 'package:firintas/constanst/color_constanst.dart';
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
-import 'package:firintas/denemeler/konsoloku.dart';
-import 'package:firintas/membership/signin.dart';
+import 'package:firintas/membership/login.dart';
+import 'package:firintas/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +24,6 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _passwordRepeatController =
       TextEditingController();
   static final _phoneNumberFormatter = PhoneNumberFormatter();
-  // https://karenbilisim.com/demo2/firintas/api1/signup?ad=Ad&soyad=Soyad&email=test@gmail.com&telefon=05421321212&ilid=41&ilceid=494&tckn=12345678910&sifre=1234546&adres=Adres
   Future<void> signUp() async {
     //print(_emailController.text);
     var url = Uri.parse('https://karenbilisim.com/demo2/firintas/api1/signup?'
@@ -41,20 +40,17 @@ class _SignupPageState extends State<SignupPage> {
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
         if (jsonResponse['status'] == 1) {
-          // Başarılı giriş mesajı
           await CustomDialog.showCustomDialog(
             context: context,
             title: "Başarılı",
             content: "Başarılı: ${jsonResponse['error']}",
           );
 
-          // Başarılı girişten sonra ana sayfaya yönlendirme
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const QrConsoleRead()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           );
         } else {
-          // Başarısız giriş mesajı
           await CustomDialog.showCustomDialog(
             context: context,
             title: "Başarısız",
@@ -62,7 +58,6 @@ class _SignupPageState extends State<SignupPage> {
           );
         }
       } else {
-        // Sunucu hatası mesajı
         await CustomDialog.showCustomDialog(
           context: context,
           title: "Sunucu Hatası",
@@ -70,7 +65,6 @@ class _SignupPageState extends State<SignupPage> {
         );
       }
     } catch (e) {
-      // İstek sırasında hata mesajı
       await CustomDialog.showCustomDialog(
         context: context,
         title: "Hata",
@@ -100,33 +94,33 @@ class _SignupPageState extends State<SignupPage> {
             CustomTextField(
                 controller: _adController,
                 label: "İsim",
-                icon: const Icon(
+                icon: Icon(
                   Icons.verified_user,
-                  color: Color.fromARGB(154, 255, 82, 2),
+                  color: AppColor.iconColor,
                 )),
             const SizedBox(height: 16),
             CustomTextField(
                 controller: _soyadController,
                 label: "Soyisim",
-                icon: const Icon(
+                icon: Icon(
                   Icons.verified_user,
-                  color: Color.fromARGB(154, 255, 82, 2),
+                  color: AppColor.iconColor,
                 )),
             const SizedBox(height: 16),
             CustomTextField(
                 controller: _emailController,
                 label: "Email",
-                icon: const Icon(
+                icon: Icon(
                   Icons.email,
-                  color: Color.fromARGB(154, 255, 82, 2),
+                  color: AppColor.iconColor,
                 )),
             const SizedBox(height: 16),
             CustomTextField(
               controller: _phoneController,
               label: "Telefon Numarası",
-              icon: const Icon(
+              icon: Icon(
                 Icons.phone,
-                color: Color.fromARGB(154, 255, 82, 2),
+                color: AppColor.iconColor,
               ),
               inputFormat: [
                 LengthLimitingTextInputFormatter(13),
@@ -152,18 +146,18 @@ class _SignupPageState extends State<SignupPage> {
                 controller: _passwordController,
                 label: "Şifre",
                 obscure: true,
-                icon: const Icon(
+                icon: Icon(
                   Icons.password,
-                  color: Color.fromARGB(154, 255, 82, 2),
+                  color: AppColor.iconColor,
                 )),
             const SizedBox(height: 16),
             CustomTextField(
                 controller: _passwordRepeatController,
                 label: "Şifreyi Onayla",
                 obscure: true,
-                icon: const Icon(
+                icon: Icon(
                   Icons.password,
-                  color: Color.fromARGB(154, 255, 82, 2),
+                  color: AppColor.iconColor,
                 )),
             const SizedBox(height: 16),
             GestureDetector(
@@ -197,11 +191,8 @@ class _SignupPageState extends State<SignupPage> {
             const SizedBox(height: 16),
             TextButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            SigninPage(navigateToSignup: () => 1)));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
               },
               child: const Text(
                 'Zaten hesabınız var mı? Giriş yapın.',
@@ -228,7 +219,6 @@ class PhoneNumberFormatter extends TextInputFormatter {
   }
 
   String _formatAsPhoneNumber(String digits) {
-    // Creating phone number format
     if (digits.length <= 3) {
       return digits;
     } else if (digits.length <= 6) {

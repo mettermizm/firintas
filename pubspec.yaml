@@ -30,10 +30,12 @@ flutter:
 
   assets:
     - assets/images/firintaslogo.png
-    - assets/images/icedlatte.png
-    - assets/images/kofte.png
     - assets/images/icelatte.png
     - assets/images/sicakicecek.png
+    - assets/images/burger.webp
+    - assets/images/cay1.png
+    - assets/images/filtrekahve.webp
+    - assets/images/pasta1.png
 
   # fonts:
   #   - family: Schyler

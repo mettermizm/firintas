@@ -4,7 +4,7 @@ import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
 import 'package:firintas/denemeler/konsoloku.dart';
 import 'package:firintas/membership/signup.dart';
-import 'package:firintas/pages/home_page.dart';
+import 'package:firintas/denemeler/denno111.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

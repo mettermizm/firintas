@@ -1,9 +1,10 @@
 import 'dart:convert';
-
+import 'package:firintas/constanst/color_constanst.dart';
+import 'package:firintas/constanst/image_constanst.dart';
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
-import 'package:firintas/denemeler/konsoloku.dart';
 import 'package:firintas/membership/signup.dart';
+import 'package:firintas/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   Future<void> signIn() async {
-    //print(_emailController.text);
     var url = Uri.parse(
         'https://karenbilisim.com/demo2/firintas/api1/signin?email=${_emailController.text}&pass=${_passwordController.text}');
     try {
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
         if (jsonResponse['status'] == 1) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const QrConsoleRead()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           );
         } else {
           await CustomDialog.showCustomDialog(
@@ -69,19 +69,16 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/firintaslogo.png',
-                height: 200,
-                width: 200,
-              ),
-              const SizedBox(
-                height: 100,
+                ImageConstanst.logo,
+                height: MediaQuery.sizeOf(context).height * 0.4,
+                width: MediaQuery.sizeOf(context).width * 0.4,
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const QrConsoleRead()));
+                          builder: (context) => const HomePage()));
                 },
                 child: const Text(
                   'Üye olmadan devam et',
@@ -101,18 +98,18 @@ class _LoginPageState extends State<LoginPage> {
                     CustomTextField(
                         controller: _emailController,
                         label: "Email",
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.email,
-                          color: Color.fromARGB(154, 255, 82, 2),
+                          color: AppColor.iconColor,
                         )),
                     const SizedBox(height: 16),
                     CustomTextField(
                         controller: _passwordController,
                         label: "Şifre",
                         obscure: true,
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.password,
-                          color: Color.fromARGB(154, 255, 82, 2),
+                          color: AppColor.iconColor,
                         )),
                     const SizedBox(height: 16),
                     CustomBtn.customBtn(signIn, context,
@@ -126,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => const SignupPage()));
                       },
                       child: const Text(
-                        'Hesabınız yok mu? Kayıt olun.',
+                        'Hesabınız yok mu? Kayıt olun',
                         style: TextStyle(color: Colors.black),
                       ),
                     ),

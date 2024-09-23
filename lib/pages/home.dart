@@ -1,18 +1,18 @@
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
-import 'package:firintas/custom/custom_urun_card.dart';
 import 'package:firintas/denemeler/den2.dart';
 import 'package:firintas/pages/qrcode_scaner.dart';
+import 'package:firintas/pages/subeler.dart';
 import 'package:flutter/material.dart';
 
-class QrConsoleRead extends StatefulWidget {
-  const QrConsoleRead({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<QrConsoleRead> createState() => _QrConsoleReadState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _QrConsoleReadState extends State<QrConsoleRead> {
+class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
@@ -27,34 +27,22 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
   Widget build(BuildContext context) {
     final List<Map<String, String>> products = [
       {
-        'name': 'Burger',
+        'name': 'Ice Latte',
         'price': '299₺',
         'image': 'assets/images/icelatte.png'
       },
       {
         'name': 'Filtre Kahve',
         'price': '79₺',
-        'image': 'assets/images/icelatte.png'
+        'image': 'assets/images/filtrekahve.webp'
       },
+      {'name': 'cay1', 'price': '79₺', 'image': 'assets/images/cay1.png'},
+      {'name': 'Burger', 'price': '79₺', 'image': 'assets/images/burger.webp'},
+      {'name': 'Pasta', 'price': '79₺', 'image': 'assets/images/pasta1.png'},
       {
-        'name': 'Filtre Kahve',
+        'name': 'Sıcak İçecek',
         'price': '79₺',
-        'image': 'assets/images/icelatte.png'
-      },
-      {
-        'name': 'Filtre Kahve',
-        'price': '79₺',
-        'image': 'assets/images/icelatte.png'
-      },
-      {
-        'name': 'Filtre Kahve',
-        'price': '79₺',
-        'image': 'assets/images/icelatte.png'
-      },
-      {
-        'name': 'Filtre Kahve',
-        'price': '79₺',
-        'image': 'assets/images/icelatte.png'
+        'image': 'assets/images/sicakicecek.png'
       },
       {
         'name': 'Filtre Kahve',
@@ -157,7 +145,7 @@ class _QrConsoleReadState extends State<QrConsoleRead> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const QRViewPage()));
+                          builder: (context) => const Subelerimiz()));
                 }, context, MediaQuery.sizeOf(context).width / 2 - 30,
                     "Şubelerimiz"),
               ],
@@ -255,10 +243,19 @@ Widget _buildPopularProduct(
           Column(
             children: [
               Container(
+                width: 80,
+                height: 80,
                 decoration: BoxDecoration(
-                    color: const Color.fromRGBO(231, 155, 105, 1),
-                    borderRadius: BorderRadius.circular(15.0)),
-                child: Image.asset(imagePath, height: 80),
+                  color: const Color.fromRGBO(231, 155, 105, 1),
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

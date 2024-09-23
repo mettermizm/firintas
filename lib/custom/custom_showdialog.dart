@@ -12,47 +12,29 @@ class CustomDialog {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20), // Rounded corners
+            borderRadius: BorderRadius.circular(20),
           ),
-          backgroundColor: Colors.white,
-          title: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color.fromRGBO(241, 102, 11, 1), // Primary color
-            ),
-          ),
-          content: Text(
-            content,
-            style: TextStyle(
-              fontSize: 16,
-              color:
-                  Colors.black87, // Slightly darker text color for readability
-            ),
-          ),
+          title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+          content: Text(content),
           actions: [
             TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Color.fromRGBO(
-                    241, 102, 11, 1), // Button background with primary color
-                padding: const EdgeInsets.symmetric(
-                    vertical: 12, horizontal: 24), // Button padding
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Rounded button
-                ),
-              ),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
-              child: Text(
-                buttonText,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white, // White text for contrast
+              child: const Text('İptal', style: TextStyle(color: Colors.grey)),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
+              child:
+                  Text(buttonText, style: const TextStyle(color: Colors.white)),
             ),
           ],
         );

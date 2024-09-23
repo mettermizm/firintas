@@ -5,44 +5,46 @@ class SliderTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
-        child: Container(
-          height: 230,
+        child: SizedBox(
+          height: screenHeight * 0.3,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List.generate(10, (index) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: SizedBox(
-                    width: 160,
+                    width: screenWidth * 0.4,
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
                         Container(
-                          width: 150,
-                          height: 150,
+                          width: screenWidth * 0.40,
+                          height: screenHeight * 0.2,
                           decoration: BoxDecoration(
                             color: const Color.fromRGBO(241, 102, 11, 1),
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.orange.withOpacity(0.5),
-                                offset: const Offset(-10, 10),
-                                blurRadius: 40.0,
-                                spreadRadius: 0.0,
+                                offset: const Offset(0, 20),
+                                blurRadius: 20.0,
+                                spreadRadius: -10.0,
                               ),
                             ],
                           ),
                         ),
                         Positioned(
-                          top: -20,
-                          left: 20,
+                          top: screenHeight * -0.03,
+                          left: screenWidth * 0.05,
                           child: Container(
-                            width: 110,
-                            height: 110,
+                            width: screenWidth * 0.3,
+                            height: screenHeight * 0.13,
                             decoration: BoxDecoration(
                               color: const Color.fromRGBO(231, 155, 104, 1),
                               borderRadius: BorderRadius.circular(20),
@@ -50,11 +52,11 @@ class SliderTop extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          top: -50,
-                          left: 25,
+                          top: screenHeight * -0.06,
+                          left: screenWidth * 0.05,
                           child: Container(
-                            width: 100,
-                            height: 100,
+                            width: screenWidth * 0.30,
+                            height: screenHeight * 0.15,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               image: const DecorationImage(
@@ -67,26 +69,24 @@ class SliderTop extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          top: 95,
-                          left: 15,
-                          child: Container(
-                            child: Text(
-                              "Iced Latte",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                          top: screenHeight * 0.13,
+                          left: screenWidth * 0.03,
+                          child: const Text(
+                            "Iced Latte",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                         Positioned(
-                          top: 110,
-                          left: 15,
-                          child: Container(
-                            child: Text(
-                              "₺ 120",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                          top: screenHeight * 0.16,
+                          left: screenWidth * 0.03,
+                          child: const Text(
+                            "₺ 120",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
