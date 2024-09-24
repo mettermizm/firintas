@@ -1,5 +1,4 @@
-import 'package:firintas/denemeler/list_pro.dart';
-import 'package:firintas/membership/login.dart';
+import 'package:firintas/pages/auth/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {

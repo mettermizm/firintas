@@ -3,7 +3,7 @@ import 'package:firintas/constanst/color_constanst.dart';
 import 'package:firintas/constanst/image_constanst.dart';
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
-import 'package:firintas/membership/signup.dart';
+import 'package:firintas/pages/auth/signup.dart';
 import 'package:firintas/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -19,8 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   Future<void> signIn() async {
-    var url = Uri.parse(
-        'https://karenbilisim.com/demo2/firintas/api1/signin?email=${_emailController.text}&pass=${_passwordController.text}');
+    var url = Uri.parse('https://karenbilisim.com/demo2/firintas/api1/'
+        'signin?email=${_emailController.text}&pass=${_passwordController.text}');
     try {
       var response = await http.get(
         url,
@@ -42,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
       } else {
-        // Sunucu hatası mesajı
         await CustomDialog.showCustomDialog(
           context: context,
           title: "Sunucu Hatası",
@@ -50,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     } catch (e) {
-      // İstek sırasında hata mesajı
       await CustomDialog.showCustomDialog(
         context: context,
         title: "Hata",

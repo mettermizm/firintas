@@ -1,7 +1,6 @@
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
-import 'package:firintas/custom/custom_urun_card.dart';
-import 'package:firintas/denemeler/den2.dart';
+import 'package:firintas/widgets/slidertop.dart';
 import 'package:firintas/pages/qrcode_scaner.dart';
 import 'package:flutter/material.dart';
 

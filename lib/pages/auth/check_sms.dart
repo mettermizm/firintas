@@ -2,28 +2,24 @@ import 'dart:convert';
 import 'package:firintas/constanst/image_constanst.dart';
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
-import 'package:firintas/pages/auth/signup.dart';
+import 'package:firintas/denemeler/konsoloku.dart';
 import 'package:firintas/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class SigninPage extends StatefulWidget {
-  final VoidCallback navigateToSignup;
-
-  const SigninPage({super.key, required this.navigateToSignup});
+class SmsCheck extends StatefulWidget {
+  const SmsCheck({super.key});
 
   @override
-  State<SigninPage> createState() => _SigninPageState();
+  State<SmsCheck> createState() => _SmsCheckState();
 }
 
-class _SigninPageState extends State<SigninPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+class _SmsCheckState extends State<SmsCheck> {
+  final TextEditingController _smscheckController = TextEditingController();
 
   Future<void> signIn() async {
-    print(_emailController.text);
     var url = Uri.parse(
-        'https://karenbilisim.com/demo2/firintas/api1/signin?email=${_emailController.text}&pass=${_passwordController.text}');
+        'https://karenbilisim.com/demo2/firintas/api1/check?pass=${_smscheckController.text}');
     try {
       var response = await http.get(
         url,
@@ -73,14 +69,6 @@ class _SigninPageState extends State<SigninPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: const Text(
-          "Giriş Yap",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -96,28 +84,13 @@ class _SigninPageState extends State<SigninPage> {
             ),
             const SizedBox(height: 16),
             CustomTextField(
-                controller: _emailController,
-                label: "Email",
+                controller: _smscheckController,
+                label: "SMS",
                 icon: const Icon(
-                  Icons.email,
+                  Icons.sms,
                   color: Color.fromARGB(154, 255, 82, 2),
                 )),
             const SizedBox(height: 16),
-            CustomTextField(
-                controller: _passwordController,
-                label: "Şifre",
-                obscure: true,
-                icon: const Icon(
-                  Icons.password,
-                  color: Color.fromARGB(154, 255, 82, 2),
-                )),
-            const SizedBox(height: 16),
-            /*
-            ElevatedButton(
-              onPressed: signIn,
-              child: const Text('Giriş Yap'),
-            ),
-            */
             GestureDetector(
               onTap: signIn,
               child: Container(
@@ -138,7 +111,7 @@ class _SigninPageState extends State<SigninPage> {
                 ),
                 child: const Center(
                     child: Text(
-                  "Giriş Yap",
+                  "Onayla",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,
@@ -149,11 +122,13 @@ class _SigninPageState extends State<SigninPage> {
             const SizedBox(height: 16),
             TextButton(
               onPressed: () {
+                /*
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => SignupPage()));
+                    */
               },
               child: const Text(
-                'Hesabınız yok mu? Kayıt olun.',
+                'Sms Gelmedi Mi?',
                 style: TextStyle(color: Colors.black),
               ),
             ),

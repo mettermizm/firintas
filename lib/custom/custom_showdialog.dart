@@ -1,3 +1,4 @@
+import 'package:firintas/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,7 +28,10 @@ class CustomDialog {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
@@ -49,6 +53,7 @@ class CustomSepetDialog {
   static Future<void> showProductDialog({
     required BuildContext context,
     required String productName,
+    required String productId,
     required String productDescription,
     required String productImageUrl,
     String addToCartButtonText = "Sepete Ekle",
@@ -67,9 +72,9 @@ class CustomSepetDialog {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(productImageUrl), // Ürün görseli
+              Image.asset(productImageUrl),
               const SizedBox(height: 10),
-              Text(productDescription), // Ürün açıklaması
+              Text(productDescription),
             ],
           ),
           actions: [
@@ -81,9 +86,7 @@ class CustomSepetDialog {
             ),
             ElevatedButton(
               onPressed: () async {
-                // Sepete ekle işlemi
-                await addToCart(
-                    productName, productDescription, productImageUrl);
+                await addToCart(productId);
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
@@ -103,18 +106,15 @@ class CustomSepetDialog {
     );
   }
 
-  static Future<void> addToCart(
-      String name, String description, String imageUrl) async {
+  static Future<void> addToCart(String productId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     List<String> cart = prefs.getStringList('cart') ?? [];
 
-    // Ürünün JSON formatında bir String olarak kaydedilmesi
-    cart.add('$name|$description|$imageUrl');
+    cart.add(productId);
 
-    // Güncellenmiş sepeti kaydet
     await prefs.setStringList('cart', cart);
 
-    print("Ürün sepete eklendi: $name");
+    print("Ürün sepete eklendi: $productId");
   }
 }

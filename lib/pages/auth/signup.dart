@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:firintas/constanst/color_constanst.dart';
+import 'package:firintas/constanst/image_constanst.dart';
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
-import 'package:firintas/membership/login.dart';
+import 'package:firintas/pages/auth/login.dart';
 import 'package:firintas/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,10 +26,12 @@ class _SignupPageState extends State<SignupPage> {
       TextEditingController();
   static final _phoneNumberFormatter = PhoneNumberFormatter();
   Future<void> signUp() async {
-    //print(_emailController.text);
+    // Telefon numarasındaki boşlukları silme
+    String formattedPhone = _phoneController.text.replaceAll(' ', '');
+
     var url = Uri.parse('https://karenbilisim.com/demo2/firintas/api1/signup?'
         'ad=${_adController.text}&soyad=${_soyadController.text}&'
-        'email=${_emailController.text}&telefon=${_phoneController.text}&'
+        'email=${_emailController.text}&telefon=$formattedPhone&'
         'sifre=${_passwordController.text}');
     print(url);
     try {
@@ -43,12 +46,7 @@ class _SignupPageState extends State<SignupPage> {
           await CustomDialog.showCustomDialog(
             context: context,
             title: "Başarılı",
-            content: "Başarılı: ${jsonResponse['error']}",
-          );
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            content: "",
           );
         } else {
           await CustomDialog.showCustomDialog(
@@ -88,7 +86,7 @@ class _SignupPageState extends State<SignupPage> {
             SizedBox(
               height: 100,
               width: 100,
-              child: Image.asset("assets/images/firintaslogo.png"),
+              child: Image.asset(ImageConstanst.logo),
             ),
             const SizedBox(height: 30),
             CustomTextField(

@@ -1,8 +1,12 @@
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
-import 'package:firintas/denemeler/den2.dart';
+import 'package:firintas/widgets/product_list_widget.dart';
+import 'package:firintas/widgets/slidertop.dart';
+import 'package:firintas/model/product_model.dart';
 import 'package:firintas/pages/qrcode_scaner.dart';
 import 'package:firintas/pages/subeler.dart';
+import 'package:firintas/services/product_service.dart';
+import 'package:firintas/widgets/loadingscreen.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,9 +17,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Future<List<ProductModel>> futureProducts;
+
   @override
   void initState() {
     super.initState();
+    futureProducts = ProductService().fetchProducts();
   }
 
   @override
@@ -25,75 +32,66 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> products = [
+    /*
+    final List<Map<String, dynamic>> products = [
       {
+        'id': '1',
         'name': 'Ice Latte',
-        'price': '299₺',
+        'price': 299,
         'image': 'assets/images/icelatte.png',
-        'description': 'Buz gibi taze süt ile hazırlanmış Ice Latte.'
+        'description': 'Buz gibi taze süt ile hazırlanmış Ice Latte.',
+        'rating': 5.0
       },
       {
+        'id': '2',
         'name': 'Filtre Kahve',
-        'price': '79₺',
+        'price': 79,
         'image': 'assets/images/filtrekahve.webp',
-        'description': 'Özenle seçilmiş taze çekirdeklerden filtre kahve.'
+        'description': 'Özenle seçilmiş taze çekirdeklerden filtre kahve.',
+        'rating': 4.5
       },
       {
-        'name': 'cay1',
-        'price': '79₺',
+        'id': '3',
+        'name': 'Çay',
+        'price': 79,
         'image': 'assets/images/cay1.png',
-        'description': 'Doğal bitkilerden hazırlanmış taze çay.'
+        'description': 'Doğal bitkilerden hazırlanmış taze çay.',
+        'rating': 4.0
       },
       {
+        'id': '4',
         'name': 'Burger',
-        'price': '79₺',
+        'price': 79,
         'image': 'assets/images/burger.webp',
-        'description': 'Lezzetli soslarla hazırlanmış ızgara burger.'
+        'description': 'Lezzetli soslarla hazırlanmış ızgara burger.',
+        'rating': 4.8
       },
       {
+        'id': '5',
         'name': 'Pasta',
-        'price': '79₺',
+        'price': 79,
         'image': 'assets/images/pasta1.png',
-        'description': 'Taze meyvelerle hazırlanmış nefis pasta.'
+        'description': 'Taze meyvelerle hazırlanmış nefis pasta.',
+        'rating': 4.7
       },
       {
+        'id': '6',
         'name': 'Sıcak İçecek',
-        'price': '79₺',
+        'price': 79,
         'image': 'assets/images/sicakicecek.png',
-        'description': 'Soğuk havalarda iç ısıtan sıcak içecek.'
+        'description': 'Soğuk havalarda iç ısıtan sıcak içecek.',
+        'rating': 4.3
       },
       {
+        'id': '7',
         'name': 'Filtre Kahve',
-        'price': '79₺',
+        'price': 79,
         'image': 'assets/images/icelatte.png',
-        'description': 'Zengin aromalı, el yapımı filtre kahve.'
-      },
-      {
-        'name': 'Filtre Kahve',
-        'price': '79₺',
-        'image': 'assets/images/icelatte.png',
-        'description': 'Klasik lezzetle taze demlenmiş filtre kahve.'
-      },
-      {
-        'name': 'Filtre Kahve',
-        'price': '79₺',
-        'image': 'assets/images/icelatte.png',
-        'description': 'Yoğun kıvamlı, zengin aromalı filtre kahve.'
-      },
-      {
-        'name': 'Filtre Kahve',
-        'price': '79₺',
-        'image': 'assets/images/icelatte.png',
-        'description': 'Gün boyu taze demlenen filtre kahve.'
-      },
-      {
-        'name': 'Filtre Kahve',
-        'price': '79₺',
-        'image': 'assets/images/icelatte.png',
-        'description': 'Sabahların vazgeçilmezi, taze filtre kahve.'
-      },
+        'description': 'Zengin aromalı, el yapımı filtre kahve.',
+        'rating': 4.6
+      }
     ];
-
+*/
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -146,8 +144,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onSubmitted: (String value) {
-                  print(
-                      'Kullanıcı "OK" butonuna bastı ve girilen değer: $value');
+                  //print('Kullanıcı "OK" butonuna bastı ve girilen değer: $value');
                 },
               ),
             ),
@@ -202,14 +199,27 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return _buildPopularProduct(product['name']!, product['price']!,
-                    product['image']!, context, products[index]);
+            FutureBuilder<List<ProductModel>>(
+              future: futureProducts,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: LoadingScreen());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Hata: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('Hiç ürün bulunamadı.'));
+                }
+                List<ProductModel> products = snapshot.data!;
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    ProductModel product = products[index];
+                    return ProductListWidget.buildPopularProduct(
+                        context, product);
+                  },
+                );
               },
             ),
           ],
@@ -251,85 +261,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-Widget _buildPopularProduct(String name, String price, String imagePath,
-    BuildContext context, Map<String, String> productList) {
-  return GestureDetector(
-    onTap: () {
-      CustomSepetDialog.showProductDialog(
-        context: context,
-        productName: productList["name"]!,
-        productDescription: productList["description"]!,
-        productImageUrl: productList["image"]!,
-      );
-    },
-    child: Padding(
-      padding: const EdgeInsets.all(6.0),
-      child: Row(
-        children: [
-          Column(
-            children: [
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(231, 155, 105, 1),
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.star, color: Colors.white, size: 16),
-                    SizedBox(width: 4),
-                    Text(
-                      '5.0',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(width: 16),
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Burger',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                '299₺',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
 }
