@@ -29,47 +29,71 @@ class _HomePageState extends State<HomePage> {
       {
         'name': 'Ice Latte',
         'price': '299₺',
-        'image': 'assets/images/icelatte.png'
+        'image': 'assets/images/icelatte.png',
+        'description': 'Buz gibi taze süt ile hazırlanmış Ice Latte.'
       },
       {
         'name': 'Filtre Kahve',
         'price': '79₺',
-        'image': 'assets/images/filtrekahve.webp'
+        'image': 'assets/images/filtrekahve.webp',
+        'description': 'Özenle seçilmiş taze çekirdeklerden filtre kahve.'
       },
-      {'name': 'cay1', 'price': '79₺', 'image': 'assets/images/cay1.png'},
-      {'name': 'Burger', 'price': '79₺', 'image': 'assets/images/burger.webp'},
-      {'name': 'Pasta', 'price': '79₺', 'image': 'assets/images/pasta1.png'},
+      {
+        'name': 'cay1',
+        'price': '79₺',
+        'image': 'assets/images/cay1.png',
+        'description': 'Doğal bitkilerden hazırlanmış taze çay.'
+      },
+      {
+        'name': 'Burger',
+        'price': '79₺',
+        'image': 'assets/images/burger.webp',
+        'description': 'Lezzetli soslarla hazırlanmış ızgara burger.'
+      },
+      {
+        'name': 'Pasta',
+        'price': '79₺',
+        'image': 'assets/images/pasta1.png',
+        'description': 'Taze meyvelerle hazırlanmış nefis pasta.'
+      },
       {
         'name': 'Sıcak İçecek',
         'price': '79₺',
-        'image': 'assets/images/sicakicecek.png'
+        'image': 'assets/images/sicakicecek.png',
+        'description': 'Soğuk havalarda iç ısıtan sıcak içecek.'
       },
       {
         'name': 'Filtre Kahve',
         'price': '79₺',
-        'image': 'assets/images/icelatte.png'
+        'image': 'assets/images/icelatte.png',
+        'description': 'Zengin aromalı, el yapımı filtre kahve.'
       },
       {
         'name': 'Filtre Kahve',
         'price': '79₺',
-        'image': 'assets/images/icelatte.png'
+        'image': 'assets/images/icelatte.png',
+        'description': 'Klasik lezzetle taze demlenmiş filtre kahve.'
       },
       {
         'name': 'Filtre Kahve',
         'price': '79₺',
-        'image': 'assets/images/icelatte.png'
+        'image': 'assets/images/icelatte.png',
+        'description': 'Yoğun kıvamlı, zengin aromalı filtre kahve.'
       },
       {
         'name': 'Filtre Kahve',
         'price': '79₺',
-        'image': 'assets/images/icelatte.png'
+        'image': 'assets/images/icelatte.png',
+        'description': 'Gün boyu taze demlenen filtre kahve.'
       },
       {
         'name': 'Filtre Kahve',
         'price': '79₺',
-        'image': 'assets/images/icelatte.png'
+        'image': 'assets/images/icelatte.png',
+        'description': 'Sabahların vazgeçilmezi, taze filtre kahve.'
       },
     ];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -185,7 +209,7 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 final product = products[index];
                 return _buildPopularProduct(product['name']!, product['price']!,
-                    product['image']!, context);
+                    product['image']!, context, products[index]);
               },
             ),
           ],
@@ -229,12 +253,16 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Widget _buildPopularProduct(
-    String name, String price, String imagePath, BuildContext context) {
+Widget _buildPopularProduct(String name, String price, String imagePath,
+    BuildContext context, Map<String, String> productList) {
   return GestureDetector(
     onTap: () {
-      CustomDialog.showCustomDialog(
-          context: context, title: "dskolf", content: "lkfd");
+      CustomSepetDialog.showProductDialog(
+        context: context,
+        productName: productList["name"]!,
+        productDescription: productList["description"]!,
+        productImageUrl: productList["image"]!,
+      );
     },
     child: Padding(
       padding: const EdgeInsets.all(6.0),
