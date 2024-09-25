@@ -1,5 +1,6 @@
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
+import 'package:firintas/pages/sepet_page.dart';
 import 'package:firintas/widgets/product_list_widget.dart';
 import 'package:firintas/widgets/slidertop.dart';
 import 'package:firintas/model/product_model.dart';
@@ -102,7 +103,10 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_bag_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const SepetPage()));
+            },
           ),
           Builder(
             builder: (context) {

@@ -19,10 +19,8 @@ class ProductListWidget {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            // Ürün görseli ve rating
             Column(
               children: [
-                // Ürün görseli
                 Container(
                   width: 80,
                   height: 80,
@@ -34,7 +32,7 @@ class ProductListWidget {
                         color: Colors.black.withOpacity(0.2),
                         spreadRadius: 1,
                         blurRadius: 5,
-                        offset: const Offset(0, 2), // Gölgeli efekt
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
