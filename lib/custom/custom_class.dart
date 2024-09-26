@@ -45,7 +45,7 @@ class CustomText {
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
-  final Icon icon;
+  final Icon? icon;
   final bool? obscure;
   final List<TextInputFormatter>? inputFormat;
   final RichText? prefix;
@@ -53,15 +53,15 @@ class CustomTextField extends StatefulWidget {
   const CustomTextField({
     required this.controller,
     required this.label,
-    required this.icon,
+    this.icon,
     this.obscure,
     this.inputFormat,
     this.prefix,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _CustomTextFieldState createState() => _CustomTextFieldState();
+  State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {

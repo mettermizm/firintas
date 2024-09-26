@@ -1,4 +1,5 @@
 import 'package:firintas/constanst/image_constanst.dart';
+import 'package:firintas/custom/custom_showdialog.dart';
 import 'package:flutter/material.dart';
 
 class SepetPage extends StatefulWidget {
@@ -12,6 +13,8 @@ class _SepetPageState extends State<SepetPage> {
   int icedLatteCount = 2;
   int cheesecakeCount = 1;
   int totalPrice = 350;
+
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -115,8 +118,16 @@ class _SepetPageState extends State<SepetPage> {
             ),
             const SizedBox(height: 8),
             GestureDetector(
-              onTap: () {
-                // Apply coupon logic
+              onTap: () async {
+                String? userInput = await CustomDialog.showInputDialog(
+                  context: context,
+                  title: 'Kullanıcı Girişi',
+                  hintText: 'Lütfen bir şeyler yazın',
+                );
+
+                if (userInput != null && userInput.isNotEmpty) {
+                  print('Girilen veri: $userInput');
+                }
               },
               child: const Text(
                 'İndirim Kuponu Kullanın',
@@ -197,22 +208,33 @@ class _SepetPageState extends State<SepetPage> {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: DecorationImage(
-                  image: AssetImage(imagePath),
-                  fit: BoxFit.cover,
-                ),
+                color: const Color.fromRGBO(241, 102, 11, 1),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.orange.withOpacity(0.5),
+                    offset: const Offset(0, 20),
+                    blurRadius: 20.0,
+                    spreadRadius: -10.0,
+                  ),
+                ],
               ),
+              child: Image.asset("assets/images/icelatte.png"),
             ),
             const SizedBox(width: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                SizedBox(
+                  width: 120,
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Text(

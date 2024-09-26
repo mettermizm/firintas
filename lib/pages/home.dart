@@ -1,3 +1,4 @@
+import 'package:firintas/constanst/image_constanst.dart';
 import 'package:firintas/custom/custom_class.dart';
 import 'package:firintas/custom/custom_showdialog.dart';
 import 'package:firintas/pages/sepet_page.dart';
@@ -230,37 +231,44 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(241, 102, 11, 1),
-              ),
-              child: Text(
-                'Menü Başlığı',
-                style: TextStyle(
+        child: Container(
+          color: Colors.white,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: const BoxDecoration(
                   color: Colors.white,
-                  fontSize: 24,
                 ),
+                child: Image.asset(ImageConstanst.logo),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Anasayfa'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Ayarlar'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Çıkış'),
-              onTap: () {},
-            ),
-          ],
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: const Text('Anasayfa'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings),
+                title: const Text('Kişisel Ayarlar'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.point_of_sale),
+                title: const Text('İndirimler'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Çıkış'),
+                onTap: () {},
+              ),
+            ],
+          ),
         ),
       ),
     );
