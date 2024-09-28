@@ -1,7 +1,7 @@
 import 'package:firintas/constanst/image_constanst.dart';
 import 'package:firintas/custom/custom_class.dart';
-import 'package:firintas/custom/custom_showdialog.dart';
 import 'package:firintas/pages/sepet_page.dart';
+import 'package:firintas/services/prefs_service.dart';
 import 'package:firintas/widgets/product_list_widget.dart';
 import 'package:firintas/widgets/slidertop.dart';
 import 'package:firintas/model/product_model.dart';
@@ -34,6 +34,21 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    int cartItemCount = 0;
+
+    Future<void> loadCartItemCount() async {
+      List<String> items = await CartService.getCartItems();
+      setState(() {
+        cartItemCount = items.length;
+      });
+    }
+
+    @override
+    void initState() {
+      super.initState();
+      loadCartItemCount();
+    }
+
     /*
     final List<Map<String, dynamic>> products = [
       {
@@ -105,10 +120,37 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.shopping_bag_outlined),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const SepetPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SepetPage()),
+              );
             },
           ),
+          if (cartItemCount > 0)
+            Positioned(
+              right: 0,
+              top: 0,
+              child: Container(
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                constraints: const BoxConstraints(
+                  minWidth: 20,
+                  minHeight: 20,
+                ),
+                child: Text(
+                  cartItemCount.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           Builder(
             builder: (context) {
               return IconButton(
