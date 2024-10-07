@@ -113,6 +113,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        elevation: 0,
         title: const Text('Mehmet'),
         centerTitle: false,
         automaticallyImplyLeading: false,
