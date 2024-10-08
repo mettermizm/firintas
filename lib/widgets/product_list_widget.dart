@@ -18,6 +18,18 @@ class ProductListWidget {
       print("Ürün sepete eklendi: $productId");
     }
 
+    Future<void> addToCart22() async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      List<String> cart = prefs.getStringList('cart') ?? [];
+
+      cart.add("productId");
+
+      await prefs.setStringList('cart', cart);
+
+      print("Ürün sepete eklendi: productId");
+    }
+
     return GestureDetector(
       onTap: () {
         CustomSepetDialog.showProductDialog(
@@ -26,7 +38,7 @@ class ProductListWidget {
           productName: productList.urunAdi,
           productDescription: productList.aciklama,
           productImageUrl: "assets/images/cay1.png",
-          onTap: addToCart(),
+          onTap: addToCart22(), //addToCart(),
         );
       },
       child: Padding(
