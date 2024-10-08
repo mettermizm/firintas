@@ -1,10 +1,23 @@
 import 'package:firintas/custom/custom_showdialog.dart';
 import 'package:firintas/model/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductListWidget {
   static Widget buildPopularProduct(
       BuildContext context, ProductModel productList) {
+    Future<void> addToCart(String productId) async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      List<String> cart = prefs.getStringList('cart') ?? [];
+
+      cart.add(productId);
+
+      await prefs.setStringList('cart', cart);
+
+      print("Ürün sepete eklendi: $productId");
+    }
+
     return GestureDetector(
       onTap: () {
         CustomSepetDialog.showProductDialog(
@@ -13,6 +26,7 @@ class ProductListWidget {
           productName: productList.urunAdi,
           productDescription: productList.aciklama,
           productImageUrl: "assets/images/cay1.png",
+          onTap: addToCart(),
         );
       },
       child: Padding(

@@ -106,6 +106,7 @@ class CustomSepetDialog {
     required String productId,
     required String productDescription,
     required String productImageUrl,
+    required Future<void> onTap,
     String addToCartButtonText = "Sepete Ekle",
   }) {
     return showDialog(
@@ -136,8 +137,7 @@ class CustomSepetDialog {
             ),
             ElevatedButton(
               onPressed: () async {
-                await addToCart(productId);
-                Navigator.of(context).pop();
+                onTap;
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
@@ -154,17 +154,5 @@ class CustomSepetDialog {
         );
       },
     );
-  }
-
-  static Future<void> addToCart(String productId) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    List<String> cart = prefs.getStringList('cart') ?? [];
-
-    cart.add(productId);
-
-    await prefs.setStringList('cart', cart);
-
-    print("Ürün sepete eklendi: $productId");
   }
 }

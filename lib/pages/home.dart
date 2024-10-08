@@ -21,10 +21,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Future<List<ProductModel>> futureProducts;
 
+  int cartItemCount = 0;
+
+  Future<void> loadCartItemCount() async {
+    List<String> items = await CartService.getCartItems();
+    print(items);
+    setState(() {
+      cartItemCount = items.length;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     futureProducts = ProductService().fetchProducts();
+    loadCartItemCount();
   }
 
   @override
@@ -34,21 +45,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    int cartItemCount = 0;
-
-    Future<void> loadCartItemCount() async {
-      List<String> items = await CartService.getCartItems();
-      setState(() {
-        cartItemCount = items.length;
-      });
-    }
-
-    @override
-    void initState() {
-      super.initState();
-      loadCartItemCount();
-    }
-
     /*
     final List<Map<String, dynamic>> products = [
       {
@@ -118,40 +114,44 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_bag_outlined),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SepetPage()),
-              );
-            },
-          ),
-          if (cartItemCount > 0)
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                constraints: const BoxConstraints(
-                  minWidth: 20,
-                  minHeight: 20,
-                ),
-                child: Text(
-                  cartItemCount.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_bag_outlined),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SepetPage()),
+                  );
+                },
               ),
-            ),
+              if (cartItemCount > 0)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 20,
+                      minHeight: 20,
+                    ),
+                    child: Text(
+                      cartItemCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
           Builder(
             builder: (context) {
               return IconButton(
