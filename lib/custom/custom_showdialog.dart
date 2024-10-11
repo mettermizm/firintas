@@ -106,7 +106,7 @@ class CustomSepetDialog {
     required String productId,
     required String productDescription,
     required String productImageUrl,
-    required Future<void> onTap,
+    required Future<Null> Function() onTap,
     String addToCartButtonText = "Sepete Ekle",
   }) {
     return showDialog(

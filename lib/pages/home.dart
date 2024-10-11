@@ -264,8 +264,7 @@ class _HomePageState extends State<HomePage> {
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     ProductModel product = products[index];
-                    return ProductListWidget.buildPopularProduct(
-                        context, product);
+                    return ProductListWidget(productList: product);
                   },
                 );
               },

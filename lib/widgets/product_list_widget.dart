@@ -3,42 +3,44 @@ import 'package:firintas/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProductListWidget {
-  static Widget buildPopularProduct(
-      BuildContext context, ProductModel productList) {
-    Future<void> addToCart(String productId) async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+class ProductListWidget extends StatefulWidget {
+  final ProductModel productList;
+  const ProductListWidget({Key? key, required this.productList})
+      : super(key: key);
 
-      List<String> cart = prefs.getStringList('cart') ?? [];
+  @override
+  _ProductListWidgetState createState() => _ProductListWidgetState();
+}
 
-      cart.add(productId);
+class _ProductListWidgetState extends State<ProductListWidget> {
+  int cartItemCount = 0;
 
-      await prefs.setStringList('cart', cart);
+  Future<bool> addToCart(String productId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> cart = prefs.getStringList('cart') ?? [];
+    cart.add(productId);
+    await prefs.setStringList('cart', cart);
+    return true;
+  }
 
-      print("Ürün sepete eklendi: $productId");
-    }
-
-    Future<void> addToCart22() async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      List<String> cart = prefs.getStringList('cart') ?? [];
-
-      cart.add("productId");
-
-      await prefs.setStringList('cart', cart);
-
-      print("Ürün sepete eklendi: productId");
-    }
-
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         CustomSepetDialog.showProductDialog(
           context: context,
-          productId: productList.id,
-          productName: productList.urunAdi,
-          productDescription: productList.aciklama,
+          productId: widget.productList.id,
+          productName: widget.productList.urunAdi,
+          productDescription: widget.productList.aciklama,
           productImageUrl: "assets/images/cay1.png",
-          onTap: addToCart22(), //addToCart(),
+          onTap: () async {
+            bool added = await addToCart(widget.productList.id);
+            if (added) {
+              setState(() {
+                cartItemCount++;
+              });
+            }
+          },
         );
       },
       child: Padding(
@@ -71,7 +73,6 @@ class ProductListWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Ürün rating
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -84,7 +85,7 @@ class ProductListWidget {
                       const Icon(Icons.star, color: Colors.white, size: 16),
                       const SizedBox(width: 4),
                       Text(
-                        productList.rating.toString(),
+                        widget.productList.rating.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -96,24 +97,20 @@ class ProductListWidget {
               ],
             ),
             const SizedBox(width: 16),
-            // Ürün bilgileri
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Ürün adı
                   Text(
-                    productList.urunAdi,
+                    widget.productList.urunAdi,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  // Ürün fiyatı
                   Text(
-                    "${productList.fiyat.toString()}₺",
+                    "${widget.productList.fiyat.toString()}₺",
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -122,7 +119,7 @@ class ProductListWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    productList.aciklama,
+                    widget.productList.aciklama,
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 12,
